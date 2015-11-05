@@ -1076,13 +1076,20 @@
 
           }
 
-          function zoomImage(val) {
+          function zoomImage(val, noStep) {
 
             if (!val) {
               return;
             }
+            
+            var proposedZoomLevel = val;
+            
+            if(!noStep) {
+              proposedZoomLevel = to2Dp(zoom + val);
+              
+            }
 			
-            var proposedZoomLevel = to2Dp(zoom + val);
+
 			
             if ((proposedZoomLevel < maxZoomedInLevel) || (proposedZoomLevel > maxZoomedOutLevel)) {
               // image wont fill whole canvas
@@ -1164,6 +1171,10 @@
 				reset();
 			}
 		  });	
+      
+      scope.$watch('zoom', function(zoom){
+        zoomImage(zoom, true);
+      });
 
 		  scope.$watch('crop',function(){
 			if(scope.crop) {
