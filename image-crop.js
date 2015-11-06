@@ -1117,11 +1117,11 @@
                         newWidth = $img.width * zoom;
                         newHeight = $img.height * zoom;
 
-                        var newXPos = currentX * zoom;
-                        var newYPos = currentY * zoom;
+                        var newXPos = currentX = currentX * zoom;
+                        var newYPos = currentY = currentY * zoom;
 
                         // check if we've exposed the gutter
-                        if (newXPos < minXPos) {
+                        /*if (newXPos < minXPos) {
                             newXPos = minXPos;
                         } else if (newXPos > maxXPos) {
                             newXPos = maxXPos;
@@ -1131,7 +1131,7 @@
                             newYPos = minYPos;
                         } else if (newYPos > maxYPos) {
                             newYPos = maxYPos;
-                        }
+                        }*/
 
                         // check if image is still going to fit the bounds of the box
                         ctx.clearRect(0, 0, $canvas.width, $canvas.height);
@@ -1316,11 +1316,12 @@
                             return;
                         }
 
-                        var posX = ((e.type === 'touchmove') ? e.changedTouches[0].clientX : e.clientX); // how far mouse has moved in current drag
-                        var posY = ((e.type === 'touchmove') ? e.changedTouches[0].clientY : e.clientY); // how far mouse has moved in current drag
-                        
-                        // calc handle position at the centre of the scaled image 
-                        moveImage(posX - $img.width*zoom*0.5 ,posY - $img.height*zoom*0.5);
+                        var diffX = startX - ((e.type === 'touchmove') ? e.changedTouches[0].clientX : e.clientX); // how far mouse has moved in current drag
+                        var diffY = startY - ((e.type === 'touchmove') ? e.changedTouches[0].clientY : e.clientY); // how far mouse has moved in current drag
+                        /*targetX = currentX - diffX; // desired new X position
+                         targetY = currentY - diffY; // desired new X position*/
+                         
+                        moveImage(currentX - diffX, currentY - diffY);
 
                     };
 
