@@ -780,8 +780,9 @@
                     // can move image freely, without bounds
                     freemove: '=',
 
-                    // can scale image without min or max zoom
-                    freezoom: '='
+                    // define min and max zoom
+                    minzoom: '=',
+                    maxzoom: '='
                 },
                 link: function (scope, element, attributes) {
 
@@ -1096,13 +1097,17 @@
 
                         }
 
-
-
-                        if (!scope.freezoom && ((proposedZoomLevel < maxZoomedInLevel) || (proposedZoomLevel > maxZoomedOutLevel))) {
+                        if (!scope.minzoom && !scope.maxzoom && ((proposedZoomLevel < maxZoomedInLevel) || (proposedZoomLevel > maxZoomedOutLevel))) {
                             // image wont fill whole canvas
                             // or image is too far zoomed in, it's gonna get pretty pixelated!
                             return;
                         }
+                        
+                        if (scope.maxzoom && scope.minzoom && ((proposedZoomLevel < scope.minzoom*0.01) || (proposedZoomLevel > scope.maxzoom*0.01))) {
+                            return;
+                        }
+                        
+                        
 
                         zoom = proposedZoomLevel;
                         // console.log('zoom', zoom);
@@ -1180,7 +1185,6 @@
                     });
 
                     scope.$watch('zoom', function(zoom){
-                        console.log('zoom: to totot ', zoom)
                         zoomImage(zoom*0.01, true);
                     });
 
@@ -1348,8 +1352,10 @@
 
                     scope.onHandleMouseWheel = function(e){
                         e.preventDefault();
-
+                        
                         zoomImage(e.deltaY > 0 ? -0.05 : 0.05);
+                        scope.zoom = zoom * 100;
+                        scope.$apply();
                     };
 
                     $canvas.addEventListener('mousewheel', scope.onHandleMouseWheel);
