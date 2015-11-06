@@ -1245,6 +1245,7 @@
                     scope.onCanvasMouseDown = function(e) {
                         startX = e.type === 'touchstart' ? e.changedTouches[0].clientX : e.clientX;
                         startY = e.type === 'touchstart' ? e.changedTouches[0].clientY : e.clientY;
+                        
                         zooming = false;
                         dragging = true;
 
@@ -1269,6 +1270,7 @@
 
                         startX = lastHandleX = (e.type === 'touchstart') ? e.changedTouches[0].clientX : e.clientX;
                         startY = lastHandleY = (e.type === 'touchstart') ? e.changedTouches[0].clientY : e.clientY;
+                        
                         dragging = false;
                         zooming = true;
 
@@ -1314,12 +1316,11 @@
                             return;
                         }
 
-                        var diffX = startX - ((e.type === 'touchmove') ? e.changedTouches[0].clientX : e.clientX); // how far mouse has moved in current drag
-                        var diffY = startY - ((e.type === 'touchmove') ? e.changedTouches[0].clientY : e.clientY); // how far mouse has moved in current drag
-                        /*targetX = currentX - diffX; // desired new X position
-                         targetY = currentY - diffY; // desired new X position*/
-
-                        moveImage(currentX - diffX, currentY - diffY);
+                        var posX = ((e.type === 'touchmove') ? e.changedTouches[0].clientX : e.clientX); // how far mouse has moved in current drag
+                        var posY = ((e.type === 'touchmove') ? e.changedTouches[0].clientY : e.clientY); // how far mouse has moved in current drag
+                        
+                        // calc handle position at the centre of the scaled image 
+                        moveImage(posX - $img.width*zoom*0.5 ,posY - $img.height*zoom*0.5);
 
                     };
 
