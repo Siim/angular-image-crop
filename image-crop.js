@@ -808,6 +808,7 @@
                     var maxLeft = 0, minLeft = 0, maxTop = 0, minTop = 0, imgLoaded = false, imgWidth = 0, imgHeight = 0;
                     var currentX = 0, currentY = 0, dragging = false, startX = 0, startY = 0, zooming = false;
                     var newWidth = imgWidth, newHeight = imgHeight;
+                    var currentWith = imgWidth, currentHeight = imgHeight;
                     var targetX = 0, targetY = 0;
                     var zoom = 1;
                     var maxZoomGestureLength = 0;
@@ -851,8 +852,8 @@
 
                             img.onload = function() {
 
-                                var height = img.height;
-                                var width = img.width;
+                                var height = currentWith = img.height;
+                                var width = currentHeight = img.width;
 
                                 //if the size is already ok, just return the image
                                 if(height <= maxSize && width <= maxSize) {
@@ -1112,13 +1113,38 @@
                         zoom = proposedZoomLevel;
                         // console.log('zoom', zoom);
 
-                        updateDragBounds();
+                        //updateDragBounds();
 
                         newWidth = $img.width * zoom;
                         newHeight = $img.height * zoom;
 
                         var newXPos = currentX; // = currentX * zoom;
                         var newYPos = currentY; // = currentY * zoom;
+                        
+
+                        if(newXPos < 0) {
+                            // current lower edge x
+
+                            var lowerX = currentX + currentWith;
+                            console.log('curentx  + currentwith', currentX, currentWith, lowerX);                            
+                            // new x from current lower
+                            newXPos = lowerX - newWidth;
+                            console.log('current:new', currentX, newXPos);  
+                            currentX = newXPos;  
+                        }
+                        
+                        if(newYPos < 0) {
+                            
+                            // current lower edge y
+                            var lowerY = currentY + currentHeight;
+                            
+                            // new x from current lower
+                            newYPos = lowerY - newHeight;
+                            currentY = newYPos;
+                            
+                        }
+                        
+
 
                         // check if we've exposed the gutter
                         /*if (newXPos < minXPos) {
@@ -1134,6 +1160,8 @@
                         }*/
 
                         // check if image is still going to fit the bounds of the box
+                        currentWith = newWidth;
+                        currentHeight = newHeight;
                         ctx.clearRect(0, 0, $canvas.width, $canvas.height);
                         ctx.drawImage($img, newXPos, newYPos, newWidth, newHeight);
                     }
