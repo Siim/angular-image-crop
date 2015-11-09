@@ -1117,8 +1117,8 @@
                         newWidth = $img.width * zoom;
                         newHeight = $img.height * zoom;
 
-                        var newXPos = currentX = currentX * zoom;
-                        var newYPos = currentY = currentY * zoom;
+                        var newXPos = currentX; // = currentX * zoom;
+                        var newYPos = currentY; // = currentY * zoom;
 
                         // check if we've exposed the gutter
                         /*if (newXPos < minXPos) {
