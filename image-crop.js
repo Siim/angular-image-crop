@@ -1213,6 +1213,10 @@
                     });
 
                     scope.$watch('zoom', function(zoom){
+                        if(!zoom) {
+                            zoom = 100;
+                        }
+                        
                         zoomImage(zoom*0.01, true);
                     });
 
